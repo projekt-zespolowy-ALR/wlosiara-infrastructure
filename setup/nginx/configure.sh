@@ -2,12 +2,15 @@
 
 WLOSIARA_PL_CONFIG_FILENAME="wlosiara.pl.conf"
 SCRIPT_DIR=$( dirname -- "$0"; )
-WLOSIARA_PL_MINIKUBE_CLUSTER_IP=$( minikube ip )
-if [ $? -ne 0 ]; then
-	echo "Getting minikube cluster's IP failed"
+if [ -z "$WLOSIARA_PL_MINIKUBE_CLUSTER_IP" ]; then
+	echo "WLOSIARA_PL_MINIKUBE_CLUSTER_IP is not set"
 	exit 1
 fi
-echo "Minikube cluster ip: $WLOSIARA_PL_MINIKUBE_CLUSTER_IP"
+if ! [[ $WLOSIARA_PL_MINIKUBE_CLUSTER_IP =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+	echo "WLOSIARA_PL_MINIKUBE_CLUSTER_IP is not valid IP address"
+	exit 1
+fi
+
 
 echo "Copying $WLOSIARA_PL_CONFIG_FILENAME to /etc/nginx/sites-available/$WLOSIARA_PL_CONFIG_FILENAME ..."
 cat $SCRIPT_DIR/configs/$WLOSIARA_PL_CONFIG_FILENAME | sed 's/$WLOSIARA_PL_MINIKUBE_CLUSTER_IP/'$WLOSIARA_PL_MINIKUBE_CLUSTER_IP'/g' > /etc/nginx/sites-available/$WLOSIARA_PL_CONFIG_FILENAME
