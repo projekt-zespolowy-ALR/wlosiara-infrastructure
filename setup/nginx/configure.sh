@@ -17,7 +17,7 @@ cat $SCRIPT_DIR/configs/$WLOSIARA_PL_CONFIG_FILENAME | sed 's/$WLOSIARA_PL_MINIK
 if [ $? -ne 0 ]; then
 	echo "Copying failed"
 	echo "Running cleanup ..."
-	$SCRIPT_DIR/cleanup.sh
+	bash $SCRIPT_DIR/cleanup.sh
 	exit 1
 fi
 echo "Copying done"
@@ -26,7 +26,7 @@ ln --target-directory=/etc/nginx/sites-enabled /etc/nginx/sites-available/$WLOSI
 if [ $? -ne 0 ]; then
 	echo "Creating symlink failed"
 	echo "Running cleanup ..."
-	$SCRIPT_DIR/cleanup.sh
+	bash $SCRIPT_DIR/cleanup.sh
 	exit 1
 fi
 echo "Symlink created"
@@ -36,7 +36,7 @@ nginx -t
 if [ $? -ne 0 ]; then
 	echo "Nginx configuration test failed"
 	echo "Running cleanup ..."
-	$SCRIPT_DIR/cleanup.sh
+	bash $SCRIPT_DIR/cleanup.sh
 	exit 1
 fi
 echo "Testing done"
@@ -46,7 +46,7 @@ nginx -s reload
 if [ $? -ne 0 ]; then
 	echo "Reloading failed"
 	echo "Running cleanup ..."
-	$SCRIPT_DIR/cleanup.sh
+	bash $SCRIPT_DIR/cleanup.sh
 	exit 1
 fi
 echo "Reloading done"
