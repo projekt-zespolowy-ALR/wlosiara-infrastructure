@@ -1,6 +1,7 @@
 #!/bin/bash
 
 WLOSIARA_PL_CONFIG_FILENAME="wlosiara.pl.conf"
+WLOSIARA_PL_DOMAINS=("wlosiara.pl" "api.wlosiara.pl")
 SCRIPT_DIR=$( dirname -- "$0"; )
 if [ -z "$WLOSIARA_PL_MINIKUBE_CLUSTER_IP" ]; then
 	echo "WLOSIARA_PL_MINIKUBE_CLUSTER_IP is not set"
@@ -50,3 +51,13 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 echo "Reloading done"
+
+echo "Obtaining certificates ..."
+certbot --domains=$(IFS=, ; echo "${WLOSIARA_PL_DOMAINS[*]}") -n --nginx
+if [ $? -ne 0 ]; then
+	echo "Obtaining certificates failed"
+	echo "Running cleanup ..."
+	bash $SCRIPT_DIR/cleanup.sh
+	exit 1
+fi
+echo "Obtaining certificates done"
