@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: wlosiara-client-server
+    labels:
+        microservice: wlosiara-client-server
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            microservice: wlosiara-client-server
+    template:
+        metadata:
+            labels:
+                microservice: wlosiara-client-server
+        spec:
+            containers:
+                - name: wlosiara-client-server
+                  image: bte1lar/wlosiara-client:latest
+                  imagePullPolicy: Always
+                  resources:
+                      limits:
+                          cpu: "100m"
+                          memory: "100Mi"
