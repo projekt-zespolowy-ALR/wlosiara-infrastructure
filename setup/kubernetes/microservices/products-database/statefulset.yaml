@@ -29,6 +29,18 @@ spec:
         - name: products-database-data
           mountPath: /var/lib/postgresql/data
       volumes:
-      - name: postgres-data
+      - name: products-database-data
         persistentVolumeClaim:
-          claimName: postgres-data
+          claimName: products-database-data
+  volumeClaimTemplates:
+  - metadata:
+      name: products-database-data
+      labels:
+        microservice: products-database
+    spec:
+      storageClassName: standard
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
