@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: products-database
+  labels:
+    microservice: products-database
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      microservice: products-database
+  template:
+    metadata:
+      labels:
+        microservice: products-database
+    spec:
+      containers:
+      - name: products-database
+        image: postgres:13.9-alpine3.17
+        env:
+          # Set the initial password for the "postgres" user to the value stored in the Secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: products-database
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - name: products-database-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data
