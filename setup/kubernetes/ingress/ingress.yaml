@@ -4,17 +4,27 @@ metadata:
   namespace: default
   name: ingress
   annotations:
-
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
     - host: wlosiara.pl
       http:
         paths:
-          - path: /
+          - path: /(.*)
             pathType: Prefix
             backend:
               service:
                 name: wlosiara-client-server
+                port:
+                  number: 80
+    - host: api.wlosiara.pl
+      http:
+        paths:
+          - path: /(.+)/products(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: products-service
                 port:
                   number: 80
