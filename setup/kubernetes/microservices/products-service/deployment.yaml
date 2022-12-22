@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: products-service
-        image: bte1lar/products-service:0.1.1
+        image: bte1lar/products-service:0.1.4
         imagePullPolicy: Always
         resources:
           limits:
