@@ -28,3 +28,13 @@ spec:
                 name: products-service-api-server
                 port:
                   number: 80
+    - host: chartmuseum.dev.wlosiara.pl
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-chartmuseum
+                port:
+                  number: 8080
