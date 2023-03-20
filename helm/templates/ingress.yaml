@@ -35,6 +35,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: wlosiara-chartmuseum
+                name: "{{ .Release.Name }}-chartmuseum"
                 port:
                   number: 8080
