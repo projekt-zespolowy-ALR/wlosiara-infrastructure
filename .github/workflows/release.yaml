@@ -39,3 +39,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm run release -- --verbose --increment=${{ github.event.inputs.release_type }} --ci
+      - name: Remember release version
+        id: remember_release_version
+        run: |
+          echo "release_version=$(node -p 'require("./package.json").version')" >> $GITHUB_OUTPUT
+    outputs:
+      release_version: ${{ steps.remember_release_version.outputs.release_version }}
+
+  publish_helm_chart_to_chartmuseum:
+    name: Publish Helm chart to ChartMuseum
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release
+        uses: robinraju/release-downloader@v1.7
+        with:
+          tag: ${{ needs.release.outputs.release_version }}
+          tarBall: true
+      - name: Unpack release
+        run: tar -xzf ./${{github.event.repository.name}}-${{ needs.release.outputs.release_version }}.tar.gz
+      - name: Remove tarball
+        run: rm ./${{github.event.repository.name}}-${{ needs.release.outputs.release_version }}.tar.gz
+      - uses: goodsmileduck/helm-push-action@v2
+        env:
+          SOURCE_DIR: "."
+          CHART_FOLDER: "helm"
+          CHARTMUSEUM_URL: "${{ secrets.CHARTMUSEUM_URL }}"
+          CHARTMUSEUM_USER: "${{ secrets.CHARTMUSEUM_USERNAME }}"
+          CHARTMUSEUM_PASSWORD: "${{ secrets.CHARTMUSEUM_PASSWORD }}"
