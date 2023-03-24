@@ -1,0 +1,20 @@
+{
+	"name": "wlosiara-infrastructure",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Infrastructure for wlosiara.pl",
+	"scripts": {
+
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure.git"
+	},
+	"author": "wlosiara.pl",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure/issues"
+	},
+	"homepage": "https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure#readme",
+	"type": "module"
+}
