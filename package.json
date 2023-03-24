@@ -4,7 +4,7 @@
 	"private": true,
 	"description": "Infrastructure for wlosiara.pl",
 	"scripts": {
-
+		"release": "release-it"
 	},
 	"repository": {
 		"type": "git",
