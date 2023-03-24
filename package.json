@@ -16,5 +16,8 @@
 		"url": "https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure/issues"
 	},
 	"homepage": "https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure#readme",
-	"type": "module"
+	"type": "module",
+	"devDependencies": {
+		"release-it": "^15.9.3"
+	}
 }
