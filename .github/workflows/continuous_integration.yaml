@@ -1,0 +1,23 @@
+name: Continuous integration
+
+on:
+  push:
+  pull_request:
+
+env:
+  SETUP_HELM_HELM_VERSION: v3.11.2
+
+jobs:
+  helm_lint_check:
+    name: Helm lint check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Run Helm lint
+        run: |
+          helm lint helm
