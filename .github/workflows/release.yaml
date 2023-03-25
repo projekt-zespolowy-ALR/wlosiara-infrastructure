@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Helm chart to Kubernetes
-        uses: deliverybot/helm@v1
+        uses: vimeda/helm@v1.6.8
         with:
           release: ${{ github.event.repository.name }}
           namespace: default
