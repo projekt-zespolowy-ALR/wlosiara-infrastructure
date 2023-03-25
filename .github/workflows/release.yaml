@@ -63,8 +63,9 @@ jobs:
       - name: Move the files to the current directory
         run: |
           shopt -s dotglob
-          mv ./${{github.event.repository.owner.login}}-${{github.event.repository.name}}-$GITHUB_SHA/* ./
+          mv ./${{github.event.repository.owner.login}}-${{github.event.repository.name}}-*/* ./
           shopt -u dotglob
+          rm -rf ./${{github.event.repository.owner.login}}-${{github.event.repository.name}}-*/
       - uses: goodsmileduck/helm-push-action@v2
         env:
           SOURCE_DIR: "."
