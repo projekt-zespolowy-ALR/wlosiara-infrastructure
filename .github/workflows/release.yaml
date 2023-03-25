@@ -14,6 +14,7 @@ on:
 
 env:
   SETUP_NODE_NODE_VERSION: 19.7
+  SETUP_HELM_HELM_VERSION: v3.11.2
 
 jobs:
   release:
@@ -66,10 +67,16 @@ jobs:
           mv ./${{github.event.repository.owner.login}}-${{github.event.repository.name}}-*/* ./
           shopt -u dotglob
           rm -rf ./${{github.event.repository.owner.login}}-${{github.event.repository.name}}-*/
-      - uses: goodsmileduck/helm-push-action@v3
-        env:
-          SOURCE_DIR: "."
-          CHART_FOLDER: "helm"
-          CHARTMUSEUM_URL: "${{ secrets.CHARTMUSEUM_URL }}"
-          CHARTMUSEUM_USER: "${{ secrets.CHARTMUSEUM_USERNAME }}"
-          CHARTMUSEUM_PASSWORD: "${{ secrets.CHARTMUSEUM_PASSWORD }}"
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Install push-cm plugin for Helm
+        run: |
+          helm plugin install https://github.com/chartmuseum/helm-push
+      - name: Add ChartMuseum repository
+        run: |
+          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
+      - name: Publish Helm chart to ChartMuseum
+        run: |
+          helm cm-push helm/ wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }} --url=${{ secrets.CHARTMUSEUM_URL }}
