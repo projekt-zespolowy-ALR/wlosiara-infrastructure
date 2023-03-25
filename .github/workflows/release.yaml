@@ -60,12 +60,11 @@ jobs:
         run: tar -xzf ./${{github.event.repository.name}}-${{ needs.release.outputs.release_version }}.tar.gz
       - name: Remove tarball
         run: rm ./${{github.event.repository.name}}-${{ needs.release.outputs.release_version }}.tar.gz
-      - name: Enable dotglob
-        run: shopt -s dotglob
-      - name: Move release files to root
-        run: mv ./${{github.event.repository.name}}-${{ needs.release.outputs.release_version }}/* ./
-      - name: Disable dotglob
-        run: shopt -u dotglob
+      - name: Move the files to the current directory
+        run: |
+          shopt -s dotglob
+          mv ./${{github.event.repository.name}}-${{ needs.release.outputs.release_version }}/* ./
+          shopt -u dotglob
       - uses: goodsmileduck/helm-push-action@v2
         env:
           SOURCE_DIR: "."
