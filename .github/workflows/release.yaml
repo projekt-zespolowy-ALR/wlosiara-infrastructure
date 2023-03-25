@@ -79,4 +79,4 @@ jobs:
           helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
       - name: Publish Helm chart to ChartMuseum
         run: |
-          helm cm-push helm/ wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }} --url=${{ secrets.CHARTMUSEUM_URL }}
+          helm cm-push helm/ wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }}
