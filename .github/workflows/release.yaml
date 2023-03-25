@@ -80,3 +80,23 @@ jobs:
       - name: Publish Helm chart to ChartMuseum
         run: |
           helm cm-push helm/ wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }}
+    outputs:
+      chart_version: ${{ needs.release.outputs.release_version }}
+  deploy_helm_chart_to_kubernetes:
+    name: Deploy Helm chart to Kubernetes
+    needs: [publish_helm_chart_to_chartmuseum]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Helm chart to Kubernetes
+        uses: helm-deploy
+        with:
+          release: ${{ github.event.repository.name }}
+          namespace: default
+          chart-version: ${{ needs.publish_helm_chart_to_chartmuseum.outputs.chart_version }}
+          repo: ${{ secrets.CHARTMUSEUM_URL }}
+          repo-alias: wlosiara-pl-chartmuseum
+          chart: wlosiara-pl-chartmuseum/${{ github.event.repository.name }}
+          repo-username: ${{ secrets.CHARTMUSEUM_USERNAME }}
+          repo-password: ${{ secrets.CHARTMUSEUM_PASSWORD }}
+        env:
+          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
