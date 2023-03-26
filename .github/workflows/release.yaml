@@ -87,9 +87,17 @@ jobs:
     needs: [publish_helm_chart_to_chartmuseum]
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Setup .kube/config
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+      - name: Add ChartMuseum repository
+        run: |
+          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
       - name: Deploy Helm chart to Kubernetes
         run: |
-          echo "${{ secrets.KUBECONFIG }}" > ./kubeconfig.yaml
-          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
           helm upgrade --install ${{ github.event.repository.name }} wlosiara-pl-chartmuseum/${{ github.event.repository.name }} --version=${{ needs.publish_helm_chart_to_chartmuseum.outputs.chart_version }} --namespace=default --repo=${{ secrets.CHARTMUSEUM_URL }} --username ${{ secrets.CHARTMUSEUM_USERNAME }} --password ${{ secrets.CHARTMUSEUM_PASSWORD }} --kubeconfig ./kubeconfig.yaml
-          rm ./kubeconfig.yaml
