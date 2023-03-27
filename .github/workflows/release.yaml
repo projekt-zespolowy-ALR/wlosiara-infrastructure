@@ -70,7 +70,10 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
-          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}`
+      - name: Build Helm chart dependencies
+        run: |
+          helm dependency build helm/
       - name: Install push-cm plugin for Helm
         run: |
           helm plugin install https://github.com/chartmuseum/helm-push
@@ -100,4 +103,4 @@ jobs:
           helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
       - name: Deploy Helm chart to Kubernetes
         run: |
-          helm upgrade --install ${{ github.event.repository.name }} wlosiara-pl-chartmuseum/${{ github.event.repository.name }} --version=${{ needs.publish_helm_chart_to_chartmuseum.outputs.chart_version }} --dependency-update --namespace=default --repo=${{ secrets.CHARTMUSEUM_URL }} --username ${{ secrets.CHARTMUSEUM_USERNAME }} --password ${{ secrets.CHARTMUSEUM_PASSWORD }}
+          helm upgrade --install ${{ github.event.repository.name }} wlosiara-pl-chartmuseum/${{ github.event.repository.name }} --version=${{ needs.publish_helm_chart_to_chartmuseum.outputs.chart_version }} --namespace=default --repo=${{ secrets.CHARTMUSEUM_URL }} --username ${{ secrets.CHARTMUSEUM_USERNAME }} --password ${{ secrets.CHARTMUSEUM_PASSWORD }}
