@@ -77,6 +77,9 @@ jobs:
       - name: Add ChartMuseum repository
         run: |
           helm repo add chartmuseum https://chartmuseum.github.io/charts
+      - name: Add Twuni repository
+        run: |
+          helm repo add twuni https://helm.twun.io
       - name: Build Helm chart dependencies
         run: |
           helm dependency build helm/
