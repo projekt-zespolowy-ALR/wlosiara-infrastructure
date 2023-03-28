@@ -12,3 +12,6 @@ dependencies:
   - name: chartmuseum
     version: 3.9.3
     repository: https://chartmuseum.github.io/charts
+  - name: docker-registry
+    version: 2.2.2
+    repository: https://helm.twun.io

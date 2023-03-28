@@ -2,5 +2,8 @@ dependencies:
 - name: chartmuseum
   repository: https://chartmuseum.github.io/charts
   version: 3.9.3
-digest: sha256:85b5b218c693448e6b1eaaf04456d303a1a1d7ed8b0b2207becec9f0c063b8ef
-generated: "2023-03-21T00:39:46.857919194+01:00"
+- name: docker-registry
+  repository: https://helm.twun.io
+  version: 2.2.2
+digest: sha256:d7e907d955f47a93b0a98e244e71d6fc998825083d8d25e65be17540313395d2
+generated: "2023-03-28T22:42:35.042145882+02:00"
