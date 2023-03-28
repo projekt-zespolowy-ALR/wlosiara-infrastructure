@@ -101,12 +101,6 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-      - name: Add Włosiara.pl ChartMuseum repository
-        run: |
-          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
-      - name: Update Helm chart repositories
-        run: |
-          helm repo update
       - name: Deploy Helm chart to Kubernetes
         run: |
-          helm upgrade --install ${{ github.event.repository.name }} wlosiara-pl-chartmuseum/${{ github.event.repository.name }} --version=${{ needs.publish_helm_chart_to_chartmuseum.outputs.chart_version }} --namespace=default --repo=${{ secrets.CHARTMUSEUM_URL }} --username ${{ secrets.CHARTMUSEUM_USERNAME }} --password ${{ secrets.CHARTMUSEUM_PASSWORD }}
+          helm upgrade --install ${{ github.event.repository.name }} ${{ github.event.repository.name }} --version=${{ needs.publish_helm_chart_to_chartmuseum.outputs.chart_version }} --namespace=default --repo=${{ secrets.CHARTMUSEUM_URL }} --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }}
