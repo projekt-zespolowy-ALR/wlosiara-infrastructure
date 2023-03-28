@@ -71,15 +71,15 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Add ChartMuseum repository
+        run: |
+          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
       - name: Build Helm chart dependencies
         run: |
           helm dependency build helm/
       - name: Install push-cm plugin for Helm
         run: |
           helm plugin install https://github.com/chartmuseum/helm-push
-      - name: Add ChartMuseum repository
-        run: |
-          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
       - name: Publish Helm chart to ChartMuseum
         run: |
           helm cm-push helm/ wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }}
