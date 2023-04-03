@@ -89,7 +89,7 @@ jobs:
           helm dependency build helm/
       - name: Run Helm package
         run: |
-          npm run helm-package
+          helm package helm/
       - name: Upload Helm chart
         uses: actions/upload-artifact@v3
         with:
