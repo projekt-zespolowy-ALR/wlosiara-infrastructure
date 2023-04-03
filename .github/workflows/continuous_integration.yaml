@@ -21,3 +21,38 @@ jobs:
       - name: Run Helm lint
         run: |
           helm lint helm
+  helm_package:
+    name: Helm package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Remember Helm chart version
+        id: remember_helm_chart_version
+        run: |
+          echo "helm_chart_version=$(grep '^version:' ./helm/Chart.yaml | awk '{print $2}')" >> $GITHUB_OUTPUT
+      - name: Remember Helm chart name
+        id: remember_helm_chart_name
+        run: |
+          echo "helm_chart_name=$(grep '^name:' ./helm/Chart.yaml | awk '{print $2}')" >> $GITHUB_OUTPUT
+      - name: Add ChartMuseum repository
+        run: |
+          helm repo add chartmuseum https://chartmuseum.github.io/charts
+      - name: Add Twuni repository
+        run: |
+          helm repo add twuni https://helm.twun.io
+      - name: Build Helm chart dependencies
+        run: |
+          helm dependency build helm/
+      - name: Run Helm package
+        run: |
+          helm package helm/
+      - name: Upload Helm chart
+        uses: actions/upload-artifact@v3
+        with:
+          name: helm_chart
+          path: ./${{ steps.remember_helm_chart_name.outputs.helm_chart_name }}-${{ steps.remember_helm_chart_version.outputs.helm_chart_version }}.tgz
