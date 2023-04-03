@@ -46,9 +46,8 @@ jobs:
           echo "release_version=$(node -p 'require("./package.json").version')" >> $GITHUB_OUTPUT
     outputs:
       release_version: ${{ steps.remember_release_version.outputs.release_version }}
-
-  publish_helm_chart_to_chartmuseum:
-    name: Publish Helm chart to ChartMuseum
+  helm_package:
+    name: Helm package
     needs: [release]
     runs-on: ubuntu-latest
     steps:
@@ -71,9 +70,14 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: ${{ env.SETUP_HELM_HELM_VERSION }}
-      - name: Add Włosiara.pl ChartMuseum repository
+      - name: Remember Helm chart version
+        id: remember_helm_chart_version
         run: |
-          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
+          echo "helm_chart_version=$(grep '^version:' ./helm/Chart.yaml | awk '{print $2}')" >> $GITHUB_OUTPUT
+      - name: Remember Helm chart name
+        id: remember_helm_chart_name
+        run: |
+          echo "helm_chart_name=$(grep '^name:' ./helm/Chart.yaml | awk '{print $2}')" >> $GITHUB_OUTPUT
       - name: Add ChartMuseum repository
         run: |
           helm repo add chartmuseum https://chartmuseum.github.io/charts
@@ -83,14 +87,42 @@ jobs:
       - name: Build Helm chart dependencies
         run: |
           helm dependency build helm/
+      - name: Run Helm package
+        run: |
+          npm run helm-package
+      - name: Upload Helm chart
+        uses: actions/upload-artifact@v3
+        with:
+          name: helm_chart
+          path: ./${{ steps.remember_helm_chart_name.outputs.helm_chart_name }}-${{ steps.remember_helm_chart_version.outputs.helm_chart_version }}.tgz
+    outputs:
+      helm_chart_name: ${{ steps.remember_helm_chart_name.outputs.helm_chart_name }}
+      helm_chart_version: ${{ steps.remember_helm_chart_version.outputs.helm_chart_version }}
+
+  publish_helm_chart_to_chartmuseum:
+    name: Publish Helm chart to ChartMuseum
+    needs: [helm_package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Helm chart
+        uses: actions/download-artifact@v3
+        with:
+          name: helm_chart
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Add Włosiara.pl ChartMuseum repository
+        run: |
+          helm repo add wlosiara-pl-chartmuseum ${{ secrets.CHARTMUSEUM_URL }}
       - name: Install push-cm plugin for Helm
         run: |
           helm plugin install https://github.com/chartmuseum/helm-push
       - name: Publish Helm chart to ChartMuseum
         run: |
-          helm cm-push helm/ wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }}
+          helm cm-push ${{ needs.helm_package.outputs.helm_chart_name }}-${{ needs.helm_package.outputs.helm_chart_version }}.tgz wlosiara-pl-chartmuseum --username=${{ secrets.CHARTMUSEUM_USERNAME }} --password=${{ secrets.CHARTMUSEUM_PASSWORD }}
     outputs:
-      chart_version: ${{ needs.release.outputs.release_version }}
+      chart_version: ${{ needs.helm_package.outputs.helm_chart_version }}
   deploy_helm_chart_to_kubernetes:
     name: Deploy Helm chart to Kubernetes
     needs: [publish_helm_chart_to_chartmuseum]
