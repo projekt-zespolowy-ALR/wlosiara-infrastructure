@@ -52,3 +52,5 @@ spec:
                 name: "{{ .Release.Name }}-docker-registry"
                 port:
                   number: 443
+            annotations:
+              nginx.ingress.kubernetes.io/proxy-body-size: "720m"
