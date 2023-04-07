@@ -7,6 +7,10 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - docker-registry.dev.wlosiara.pl
+      secretName: wlosiara-pl-docker-registry-tls
   rules:
     - host: wlosiara.pl
       http:
@@ -47,4 +51,4 @@ spec:
               service:
                 name: "{{ .Release.Name }}-docker-registry"
                 port:
-                  number: 5000
+                  number: 443
