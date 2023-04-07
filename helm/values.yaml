@@ -5,3 +5,16 @@ chartmuseum:
 docker-registry:
   service:
     port: 443
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/proxy-body-size: "720m"
+    hosts:
+      - docker-registry.dev.wlosiara.pl
+    path: "/"
+    tls:
+      - hosts:
+          - docker-registry.dev.wlosiara.pl
+        secretName: wlosiara-pl-docker-registry-tls

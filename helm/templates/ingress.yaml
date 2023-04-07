@@ -8,10 +8,6 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - docker-registry.dev.wlosiara.pl
-      secretName: wlosiara-pl-docker-registry-tls
   rules:
     - host: wlosiara.pl
       http:
@@ -43,15 +39,3 @@ spec:
                 name: "{{ .Release.Name }}-chartmuseum"
                 port:
                   number: 8080
-    - host: docker-registry.dev.wlosiara.pl
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: "{{ .Release.Name }}-docker-registry"
-                port:
-                  number: 443
-            annotations:
-              nginx.ingress.kubernetes.io/proxy-body-size: "720m"
