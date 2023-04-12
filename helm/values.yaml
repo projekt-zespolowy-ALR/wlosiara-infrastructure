@@ -18,3 +18,5 @@ docker-registry:
       - hosts:
           - docker-registry.dev.wlosiara.pl
         secretName: wlosiara-pl-docker-registry-tls
+  # secrets:
+  #   htpasswd: # pass this manually
