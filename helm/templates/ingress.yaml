@@ -16,7 +16,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: wlosiara-client-server
+                name: wlosiara-client
                 port:
                   number: 80
     - host: api.wlosiara.pl
