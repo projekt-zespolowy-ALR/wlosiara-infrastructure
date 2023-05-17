@@ -1,5 +1,5 @@
 {
-	"name": "wlosiara-infrastructure",
+	"name": "wlosiara-pl-infrastructure",
 	"version": "1.8.3",
 	"private": true,
 	"description": "Infrastructure for wlosiara.pl",
@@ -8,14 +8,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure.git"
+		"url": "git+https://github.com/projekt-zespolowy-ALR/wlosiara-pl-infrastructure.git"
 	},
 	"author": "wlosiara.pl",
 	"license": "UNLICENSED",
 	"bugs": {
-		"url": "https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure/issues"
+		"url": "https://github.com/projekt-zespolowy-ALR/wlosiara-pl-infrastructure/issues"
 	},
-	"homepage": "https://github.com/projekt-zespolowy-ALR/wlosiara-infrastructure#readme",
+	"homepage": "https://github.com/projekt-zespolowy-ALR/wlosiara-pl-infrastructure#readme",
 	"type": "module",
 	"devDependencies": {
 		"@j-ulrich/release-it-regex-bumper": "^4.1.1",
