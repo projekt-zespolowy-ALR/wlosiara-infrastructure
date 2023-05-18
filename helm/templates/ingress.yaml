@@ -16,7 +16,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: wlosiara-client
+                name: wlosiara-pl-website-service
                 port:
                   number: 80
     - host: api.wlosiara.pl
@@ -26,7 +26,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: products-service-api-server
+                name: wlosiara-pl-products-service
                 port:
                   number: 80
     - host: chartmuseum.dev.wlosiara.pl
