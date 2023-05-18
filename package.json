@@ -1,6 +1,6 @@
 {
 	"name": "wlosiara-pl-infrastructure",
-	"version": "1.8.3",
+	"version": "1.8.4",
 	"private": true,
 	"description": "Infrastructure for wlosiara.pl",
 	"scripts": {
