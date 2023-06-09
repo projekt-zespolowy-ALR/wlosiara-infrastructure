@@ -4,9 +4,9 @@ description: Wlosiara cluster
 
 type: application
 
-version: 1.8.5
+version: 1.8.6
 
-appVersion: "1.8.5"
+appVersion: "1.8.6"
 
 dependencies:
   - name: chartmuseum
