@@ -1,5 +1,8 @@
 chartmuseum:
   env:
+    secret:
+      BASIC_AUTH_USER: null # pass this manually
+      BASIC_AUTH_PASS: null # pass this manually
     open:
       DISABLE_API: false
 docker-registry:
