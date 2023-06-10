@@ -22,11 +22,39 @@ spec:
     - host: api.wlosiara.pl
       http:
         paths:
-          - path: /(.+)/(.+)+(/|$)(.*)
+          - path: /products
             pathType: Prefix
             backend:
               service:
                 name: wlosiara-pl-products-service
+                port:
+                  number: 80
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-auth-service
+                port:
+                  number: 80
+          - path: /blog
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-blog-service
+                port:
+                  number: 80
+          - path: /quizzes
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-quizzes-service
+                port:
+                  number: 80
+          - path: /users
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-users-service
                 port:
                   number: 80
     - host: chartmuseum.dev.wlosiara.pl
