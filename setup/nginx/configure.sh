@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WLOSIARA_PL_CONFIG_FILENAME="wlosiara.pl.conf"
-WLOSIARA_PL_DOMAINS=("wlosiara.pl" "api.wlosiara.pl")
+WLOSIARA_PL_DOMAINS=("wlosiara.pl" "api.wlosiara.pl" "chartmuseum.dev.wlosiara.pl" "kubernetes.dev.wlosiara.pl" "docker-registry.dev.wlosiara.pl")
 SCRIPT_DIR=$( dirname -- "$0"; )
 if [ -z "$WLOSIARA_PL_MINIKUBE_CLUSTER_IP" ]; then
 	echo "WLOSIARA_PL_MINIKUBE_CLUSTER_IP is not set"
