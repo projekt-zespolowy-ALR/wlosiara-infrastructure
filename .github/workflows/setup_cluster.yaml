@@ -10,7 +10,6 @@ env:
 jobs:
   setup_cluster:
     name: Setup cluster
-    needs: [release]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
