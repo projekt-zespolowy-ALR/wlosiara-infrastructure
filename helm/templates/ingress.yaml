@@ -12,7 +12,7 @@ spec:
     - host: wlosiara.pl
       http:
         paths:
-          - path: /(.*)
+          - path: /
             pathType: Prefix
             backend:
               service:
@@ -29,28 +29,28 @@ spec:
                 name: wlosiara-pl-products-service
                 port:
                   number: 80
-          - path: /auth
+          - path: /auth(/|$)(.*)
             pathType: Prefix
             backend:
               service:
                 name: wlosiara-pl-auth-service
                 port:
                   number: 80
-          - path: /blog
+          - path: /blog(/|$)(.*)
             pathType: Prefix
             backend:
               service:
                 name: wlosiara-pl-blog-service
                 port:
                   number: 80
-          - path: /quizzes
+          - path: /quizzes(/|$)(.*)
             pathType: Prefix
             backend:
               service:
                 name: wlosiara-pl-quizzes-service
                 port:
                   number: 80
-          - path: /users
+          - path: /users(/|$)(.*)
             pathType: Prefix
             backend:
               service:
