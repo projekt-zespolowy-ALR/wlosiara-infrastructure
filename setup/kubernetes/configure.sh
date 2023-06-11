@@ -10,7 +10,7 @@ kubectl apply -f $SCRIPT_DIR/github-actions-runner/
 echo "Applying done"
 
 
-GITHUB_ACTIONS_RUNNER_TOKEN=$( kubectl get secret/github-actions-runner -o jsonpath={.data.token} )
+GITHUB_ACTIONS_RUNNER_TOKEN=$( kubectl get secret/github-actions-runner -o jsonpath={.data.token} | base64 -d)
 KUBECONFIG=$(cat $SCRIPT_DIR/templates/kubeconfig.yaml | sed 's~$KUBERNETES_CLUSTER_API_BASE_URL~'$KUBERNETES_CLUSTER_API_BASE_URL'~g' | sed 's~$GITHUB_ACTIONS_RUNNER_TOKEN~'$GITHUB_ACTIONS_RUNNER_TOKEN'~g')
 if [ $? -ne 0 ]; then
 	echo "Creating kubeconfig failed"
