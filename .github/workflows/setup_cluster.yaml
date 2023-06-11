@@ -1,0 +1,50 @@
+name: Setup cluster
+
+on:
+  workflow_dispatch:
+
+env:
+  SETUP_NODE_NODE_VERSION: 19.7
+  SETUP_HELM_HELM_VERSION: v3.11.2
+
+jobs:
+  setup_cluster:
+    name: Setup cluster
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.SETUP_HELM_HELM_VERSION }}
+      - name: Add ChartMuseum repository
+        run: |
+          helm repo add chartmuseum https://chartmuseum.github.io/charts
+      - name: Add Twuni repository
+        run: |
+          helm repo add twuni https://helm.twun.io
+      - name: Build Helm chart dependencies
+        run: |
+          helm dependency build helm/
+      - name: Setup .kube/config
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          chmod 600 ~/.kube/config
+      - name: Install apache2-utils
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apache2-utils
+      - name: Deploy Helm chart to Kubernetes
+        run: |
+          helm upgrade --install ${{ github.event.repository.name }} helm --namespace=default --set=docker-registry.secrets.htpasswd=$(htpasswd -nbB '${{ secrets.DOCKER_REGISTRY_USERNAME }}' '${{ secrets.DOCKER_REGISTRY_PASSWORD }}' | tr -d '\n') --set=chartmuseum.env.secret.BASIC_AUTH_USER=${{ secrets.CHARTMUSEUM_USERNAME }} --set=chartmuseum.env.secret.BASIC_AUTH_PASS=${{ secrets.CHARTMUSEUM_PASSWORD }}
+      # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
+      - name: Create image pull secret
+        run: |
+          kubectl create secret docker-registry docker-registry --docker-server=${{ secrets.DOCKER_REGISTRY_HOST }} --docker-username=${{ secrets.DOCKER_REGISTRY_USERNAME }} --docker-password=${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      # https://stackoverflow.com/questions/55223075/automatically-use-secret-when-pulling-from-private-registry
+      - name: Configure default service account to use image pull secret
+        run: |
+          kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "docker-registry"}]}'
