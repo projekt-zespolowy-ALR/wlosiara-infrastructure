@@ -22,7 +22,7 @@ spec:
     - host: api.wlosiara.pl
       http:
         paths:
-          - path: /products
+          - path: /products(/|$)(.*)
             pathType: Prefix
             backend:
               service:
