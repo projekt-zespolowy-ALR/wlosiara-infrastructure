@@ -2,20 +2,19 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: default
-  name: ingress
+  name: chartmuseum
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
   rules:
-    - host: wlosiara.pl
+    - host: chartmuseum.dev.wlosiara.pl
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: wlosiara-pl-website-service
+                name: "{{ .Release.Name }}-chartmuseum"
                 port:
-                  number: 80
- 
+                  number: 8080

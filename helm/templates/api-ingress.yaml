@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: default
+  name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.wlosiara.pl
+      http:
+        paths:
+          - path: /products(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-products-service
+                port:
+                  number: 80
+          - path: /auth(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-auth-service
+                port:
+                  number: 80
+          - path: /blog(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-blog-service
+                port:
+                  number: 80
+          - path: /quizzes(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-quizzes-service
+                port:
+                  number: 80
+          - path: /users(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: wlosiara-pl-users-service
+                port:
+                  number: 80
